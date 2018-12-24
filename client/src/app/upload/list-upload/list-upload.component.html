@@ -4,7 +4,7 @@
 
 <div [hidden]="!showFile">
   <div class="panel panel-primary">
-    <div class="panel-heading">List of Files on Local Storage</div>
+    <div class="panel-heading">List of Files currently held on Local Storage</div>
     <div *ngFor="let file of fileUploads | async">
       <div class="panel-body">
         <details-upload [fileUpload]='file'></details-upload>

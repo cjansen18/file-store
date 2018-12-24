@@ -25,6 +25,6 @@ public class SpringBootFileUploadApplication implements CommandLineRunner {
 	public void run(String... arg) throws Exception {
 		if(deleteOnStartupFlag)
 			storageService.deleteAll();
-		storageService.init();
+//		storageService.init();
 	}
 }

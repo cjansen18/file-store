@@ -5,6 +5,8 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class StorageService {
 
 	Logger log = LoggerFactory.getLogger(this.getClass().getName());
+
+	public Path getRootLocation() {
+		return rootLocation;
+	}
+
 	private final Path rootLocation = Paths.get("upload-dir");
 
 	public void store(MultipartFile file) {
@@ -40,6 +47,15 @@ public class StorageService {
 		} catch (MalformedURLException e) {
 			throw new RuntimeException("FAIL!");
 		}
+	}
+
+	public List<String> loadPreviouslyStoredFiles() throws IOException {
+		Path configFilePath=getRootLocation();
+		List<String> list=Files.walk(configFilePath)
+				.filter(p->Files.isRegularFile(p))
+				.map(p->p.getFileName().toString())
+				.collect(Collectors.toList());
+		return list;
 	}
 
 	public void deleteAll() {

@@ -1,5 +1,8 @@
 package com.chrisjansen.filestore.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import com.chrisjansen.filestore.storage.StorageService;
+
+import static java.util.stream.Collectors.toList;
 
 @Controller
 public class UploadController {
@@ -44,12 +49,21 @@ public class UploadController {
 		}
 	}
 
+
+
 	@GetMapping("/getallfiles")
 	public ResponseEntity<List<String>> getListFiles(Model model) {
+
+		try {
+			files=storageService.loadPreviouslyStoredFiles();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		List<String> fileNames = files
 				.stream().map(fileName -> MvcUriComponentsBuilder
 						.fromMethodName(UploadController.class, "getFile", fileName).build().toString())
-				.collect(Collectors.toList());
+				.collect(toList());
 
 		return ResponseEntity.ok().body(fileNames);
 	}

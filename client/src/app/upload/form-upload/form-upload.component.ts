@@ -16,6 +16,9 @@ export class FormUploadComponent implements OnInit {
   constructor(private uploadService: UploadFileService) { }
 
   ngOnInit() {
+    this.uploadService.getFiles().subscribe(event=> {
+
+    });
   }
 
   selectFile(event) {
